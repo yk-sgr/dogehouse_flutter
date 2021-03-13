@@ -1,12 +1,14 @@
-import 'package:dogehouse_flutter/models/home_item_model.dart';
+import 'package:dogehouse_flutter/models/models.dart';
 import 'package:dogehouse_flutter/resources/palette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class HomeItem extends StatelessWidget {
-  final HomeItemModel homeItemModel;
+class HomeItemPlanned extends StatelessWidget {
+  final ScheduledRoom homeItemModel;
 
-  HomeItem(this.homeItemModel);
+  HomeItemPlanned(
+    this.homeItemModel,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class HomeItem extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              homeItemModel.title,
+                              homeItemModel.name,
                               style: TextStyle(color: Palette.lightWhite, fontWeight: FontWeight.bold, fontSize: 15),
                             ),
                           ),
@@ -40,7 +42,7 @@ class HomeItem extends StatelessWidget {
                             children: [
                               Container(
                                 decoration: new BoxDecoration(
-                                  color: homeItemModel.isStarted ? Palette.primaryColor : Palette.lightBlue,
+                                  color: Palette.lightBlue,
                                   shape: BoxShape.circle,
                                 ),
                                 width: 14,
@@ -49,7 +51,7 @@ class HomeItem extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  homeItemModel.sideInfo,
+                                  homeItemModel.scheduledFor.toString(),
                                   style: TextStyle(color: Palette.lightWhite),
                                 ),
                               )
@@ -70,7 +72,7 @@ class HomeItem extends StatelessWidget {
                       child: Container(
                         height: 30,
                         child: ListView.builder(
-                          itemCount: homeItemModel.tags.length,
+                          itemCount: 0,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             return Padding(
@@ -84,7 +86,7 @@ class HomeItem extends StatelessWidget {
                                   child: Padding(
                                     padding: const EdgeInsets.only(left: 10, right: 10),
                                     child: Text(
-                                      homeItemModel.tags[index],
+                                      homeItemModel.description[index],
                                       style: TextStyle(
                                         color: Palette.lightWhite,
                                       ),
