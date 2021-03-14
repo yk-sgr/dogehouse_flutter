@@ -1,3 +1,4 @@
+import 'package:dogehouse_flutter/resources/palette.dart';
 import 'package:dogehouse_flutter/utils/responsive.dart';
 import 'package:flutter/material.dart';
 
@@ -11,13 +12,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int currentIndex = 0;
+  PageController pageController = PageController(
+    initialPage: 0,
+  );
+
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         drawer: _size.width <= 1100 ? Drawer(child: HomeLeft()) : null,
-        endDrawer: _size.width <= 693 ? Drawer(child: HomeRight()) : null,
+        bottomNavigationBar: _size.width <= 693
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 1,
+                    color: Palette.separateLine,
+                  ),
+                  bottomNavBar(),
+                ],
+              )
+            : null,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(30.0),
           child: AppBar(
@@ -28,7 +46,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         body: Responsive(
-          mobile: HomeCenter(),
+          mobile: PageView(
+            controller: pageController,
+            physics: NeverScrollableScrollPhysics(),
+            children: [
+              HomeCenter(),
+              HomeLeft(),
+              HomeRight(),
+            ],
+          ),
           tablet: Row(
             children: [
               Expanded(
@@ -59,6 +85,46 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget bottomNavBar() {
+    final List<BottomNavigationBarItem> items = [
+      BottomNavigationBarItem(
+          icon: Icon(
+            Icons.home,
+            color: currentIndex == 0 ? Palette.primaryColor : Palette.lightWhite,
+          ),
+          label: 'Feed'),
+      BottomNavigationBarItem(
+          icon: Icon(
+            Icons.people,
+            color: currentIndex == 1 ? Palette.primaryColor : Palette.lightWhite,
+          ),
+          label: 'People'),
+      BottomNavigationBarItem(
+          icon: Icon(
+            Icons.person,
+            color: currentIndex == 2 ? Palette.primaryColor : Palette.lightWhite,
+          ),
+          label: 'Profile'),
+    ];
+
+    return BottomNavigationBar(
+      items: items,
+      onTap: (int index) {
+        currentIndex = index;
+        pageController.jumpToPage(index);
+        setState(() {});
+      },
+      currentIndex: currentIndex,
+      iconSize: 24.0,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.white,
+      selectedFontSize: 0.0,
+      type: BottomNavigationBarType.fixed,
+      elevation: 18.0,
+      backgroundColor: Palette.backgroundColor,
     );
   }
 }

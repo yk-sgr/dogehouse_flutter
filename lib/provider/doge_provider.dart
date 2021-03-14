@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:dogehouse_flutter/models/auth_model.dart';
+import 'package:dogehouse_flutter/models/chat_model.dart';
 import 'package:dogehouse_flutter/models/models.dart';
 import 'package:dogehouse_flutter/resources/api.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:http/http.dart' as http;
 
 class DogeProvider with ChangeNotifier {
   WebSocketChannel channel;
@@ -20,7 +21,7 @@ class DogeProvider with ChangeNotifier {
 
   Room currRoom;
   CurrentRoom currentRoom;
-  List currMessages = [];
+  List<ChatModel> currMessages = [];
 
   String getRandString(int len) {
     var random = Random.secure();
@@ -57,6 +58,17 @@ class DogeProvider with ChangeNotifier {
             currentRoom = CurrentRoom.fromJson(json["d"]);
             notifyListeners();
             break;
+
+          case "new_chat_msg":
+            currMessages.add(ChatModel.fromJson(json["d"]["msg"]));
+            notifyListeners();
+            break;
+          case "you-joined-as-peer":
+            //   l(json["d"]["recvTransportOptions"]["iceParameters"]["usernameFragment"], json["d"]["recvTransportOptions"]["iceParameters"]["password"]);
+            //  json["d"]["recvTransportOptions"]["iceCandidates"][0]["ip"]
+            //  json["d"]["recvTransportOptions"]["iceCandidates"][0]["port"]
+            break;
+
           case "error":
             debugPrint("error");
             break;
@@ -116,6 +128,10 @@ class DogeProvider with ChangeNotifier {
   }
 
   leaveRoom() {
+    currRoom = null;
+    currentRoom = null;
+    currentRoom = null;
+    currMessages = [];
     channel.sink.add(jsonEncode({"op": "leave_room", "d": {}}));
   }
 

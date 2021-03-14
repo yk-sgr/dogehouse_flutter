@@ -6,8 +6,11 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.black, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light));
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: Color(0xFF0c0e11),
+      statusBarColor: Color(0xFF0c0e11),
+      statusBarBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.light));
   runApp(DogeHouseApp());
 }
 
